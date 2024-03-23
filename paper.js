@@ -1,5 +1,3 @@
-
-
 function downloadSVG() {
     const svgContainer = document.getElementById('svgContainer');
     const svgContent = svgContainer.innerHTML;
@@ -13,7 +11,7 @@ function downloadSVG() {
 };
 
 function paperHeightFunc() {
-    const gridSize = parseFloat(document.getElementById('gridSize').value);
+    const gridSize = Decimal(document.getElementById('gridSize').value);
 
     const verticalCells = document.getElementsByName('verticalCells');
     const verticalCellValues = Array.from(verticalCells).map(el => el.value);
@@ -23,11 +21,11 @@ function paperHeightFunc() {
     const verticalStrokeWidthValues = Array.from(verticalStrokeWidths).map(el => el.value);
     const maxVerticalStrokeWidth = Math.max(...verticalStrokeWidthValues);
 
-    return maxHorizontalCell * gridSize + (maxVerticalStrokeWidth);
+    return gridSize.times(maxHorizontalCell).plus(maxVerticalStrokeWidth);
 }
 
 function paperWidthFunc() {
-    const gridSize = parseFloat(document.getElementById('gridSize').value);
+    const gridSize = new Decimal(document.getElementById('gridSize').value);
 
     const horizontalCells = document.getElementsByName('horizontalCells');
     const horizontalCellValues = Array.from(horizontalCells).map(el => el.value);
@@ -37,12 +35,12 @@ function paperWidthFunc() {
     const horizontalStrokeWidthValues = Array.from(horizontalStrokeWidths).map(el => el.value);
     const maxHorizontalStrokeWidth = Math.max(...horizontalStrokeWidthValues);
 
-    return maxVerticalCell * gridSize + (maxHorizontalStrokeWidth);
+    return gridSize.times(maxVerticalCell).plus(maxHorizontalStrokeWidth);
 }
 
 function do_grid(direction, svgContent, j) {
     // Calculate the required space using grid size and the number of lines
-    const gridSize = parseFloat(document.getElementById('gridSize').value);
+    const gridSize = Decimal(document.getElementById('gridSize').value);
     const gridUnits = document.getElementById('gridUnits').value;
     const Cells = document.getElementsByName(`${direction}Cells`);
     const CellValues = Array.from(Cells).map(el => el.value);
@@ -51,7 +49,7 @@ function do_grid(direction, svgContent, j) {
     const Colors = document.getElementsByName(`${direction}Color`);
     const StrokeWidths = document.getElementsByName(`${direction}StrokeWidth`);
     const StrokeWidthValues = Array.from(StrokeWidths).map(el => el.value);
-    const maxStrokeWidth = Math.max(...StrokeWidthValues);
+    const maxStrokeWidth = Decimal(Math.max(...StrokeWidthValues));
     const StrokeDashArrays = document.getElementsByName(`${direction}StrokeDashArray`);
     const paperHeight = paperHeightFunc();
     const paperWidth = paperWidthFunc();
@@ -59,17 +57,20 @@ function do_grid(direction, svgContent, j) {
 
     // Calculate the horizontal spacing for the lines
     const color = Colors[j].value
-    const offset_number = parseInt(Offsets[j].value);
-    const offset_size = offset_number * gridSize;
+    const offsetNumber = parseInt(Offsets[j].value);
+
+    let offset_size = gridSize.times(offsetNumber);
     const multiplier = parseInt(Multipliers[j].value);
-    const strokeWidth = parseFloat(StrokeWidths[j].value);
+    const strokeWidth = Decimal(StrokeWidths[j].value);
     let strokeDashArray = StrokeDashArrays[j].value;
     strokeDashArray = strokeDashArray.split(',').map(el => `${el}${gridUnits}`).join(',');
     let number_of_lines = parseInt(Cells[j].value);
 
     // Add the vertical lines
-    for (let i = 0; i <= number_of_lines - Math.abs(offset_number); i += (multiplier >= 1 ? multiplier : 1)) {
-        let x = gridSize * i + (maxStrokeWidth / 2) + (offset_size > 0 ? offset_size : 0);
+    for (let i = 0; i <= number_of_lines - Math.abs(offsetNumber); i += (multiplier >= 1 ? multiplier : 1)) {
+        offset_amoun = offset_size > 0 ? offset_size : 0
+        half_stroke = maxStrokeWidth.dividedBy(2);
+        let x = gridSize.times(i).plus(half_stroke).plus(offset_amoun);
         if (direction == "horizontal") {
             svgContent += `<line 
                         x1="${x}${gridUnits}"
@@ -98,7 +99,7 @@ function do_grid(direction, svgContent, j) {
 }
 function generateSVG() {
     // Calculate the required space using grid size and the number of lines
-    const gridSize = parseFloat(document.getElementById('gridSize').value);
+    const gridSize = Decimal(document.getElementById('gridSize').value);
     const gridUnits = document.getElementById('gridUnits').value;
     const paperHeight = paperHeightFunc();
     const paperWidth = paperWidthFunc();

@@ -15,61 +15,61 @@ function downloadSVG() {
 function paperHeightFunc() {
     const gridSize = parseFloat(document.getElementById('gridSize').value);
 
-    const verticalCellsFields = document.getElementsByName('verticalCellsField');
-    const verticalCellFieldValues = Array.from(verticalCellsFields).map(el => el.value);
-    const maxHorizontalCellField = Math.max(...verticalCellFieldValues);
+    const verticalCells = document.getElementsByName('verticalCells');
+    const verticalCellValues = Array.from(verticalCells).map(el => el.value);
+    const maxHorizontalCell = Math.max(...verticalCellValues);
 
-    const verticalStrokeWidthFields = document.getElementsByName('verticalStrokeWidthField');
-    const verticalStrokeWidthFieldValues = Array.from(verticalStrokeWidthFields).map(el => el.value);
-    const maxVerticalStrokeWidthField = Math.max(...verticalStrokeWidthFieldValues);
+    const verticalStrokeWidths = document.getElementsByName('verticalStrokeWidth');
+    const verticalStrokeWidthValues = Array.from(verticalStrokeWidths).map(el => el.value);
+    const maxVerticalStrokeWidth = Math.max(...verticalStrokeWidthValues);
 
-    return maxHorizontalCellField * gridSize + (maxVerticalStrokeWidthField);
+    return maxHorizontalCell * gridSize + (maxVerticalStrokeWidth);
 }
 
 function paperWidthFunc() {
     const gridSize = parseFloat(document.getElementById('gridSize').value);
 
-    const horizontalCellsFields = document.getElementsByName('horizontalCellsField');
-    const horizontalCellFieldValues = Array.from(horizontalCellsFields).map(el => el.value);
-    const maxVerticalCellField = Math.max(...horizontalCellFieldValues);
+    const horizontalCells = document.getElementsByName('horizontalCells');
+    const horizontalCellValues = Array.from(horizontalCells).map(el => el.value);
+    const maxVerticalCell = Math.max(...horizontalCellValues);
 
-    const horizontalStrokeWidthFields = document.getElementsByName('horizontalStrokeWidthField');
-    const horizontalStrokeWidthFieldValues = Array.from(horizontalStrokeWidthFields).map(el => el.value);
-    const maxHorizontalStrokeWidthField = Math.max(...horizontalStrokeWidthFieldValues);
+    const horizontalStrokeWidths = document.getElementsByName('horizontalStrokeWidth');
+    const horizontalStrokeWidthValues = Array.from(horizontalStrokeWidths).map(el => el.value);
+    const maxHorizontalStrokeWidth = Math.max(...horizontalStrokeWidthValues);
 
-    return maxVerticalCellField * gridSize + (maxHorizontalStrokeWidthField);
+    return maxVerticalCell * gridSize + (maxHorizontalStrokeWidth);
 }
 
 function do_grid(direction, svgContent, j) {
     // Calculate the required space using grid size and the number of lines
     const gridSize = parseFloat(document.getElementById('gridSize').value);
     const gridUnits = document.getElementById('gridUnits').value;
-    const CellsFields = document.getElementsByName(`${direction}CellsField`);
-    const CellFieldValues = Array.from(CellsFields).map(el => el.value);
-    const maxCellField = Math.max(...CellFieldValues);
-    const OffsetFields = document.getElementsByName(`${direction}OffsetField`);
-    const ColorFields = document.getElementsByName(`${direction}ColorField`);
-    const StrokeWidthFields = document.getElementsByName(`${direction}StrokeWidthField`);
-    const StrokeWidthFieldValues = Array.from(StrokeWidthFields).map(el => el.value);
-    const maxStrokeWidthField = Math.max(...StrokeWidthFieldValues);
-    const StrokeDashArrayFields = document.getElementsByName(`${direction}StrokeDashArrayField`);
+    const Cells = document.getElementsByName(`${direction}Cells`);
+    const CellValues = Array.from(Cells).map(el => el.value);
+    const maxCell = Math.max(...CellValues);
+    const Offsets = document.getElementsByName(`${direction}Offset`);
+    const Colors = document.getElementsByName(`${direction}Color`);
+    const StrokeWidths = document.getElementsByName(`${direction}StrokeWidth`);
+    const StrokeWidthValues = Array.from(StrokeWidths).map(el => el.value);
+    const maxStrokeWidth = Math.max(...StrokeWidthValues);
+    const StrokeDashArrays = document.getElementsByName(`${direction}StrokeDashArray`);
     const paperHeight = paperHeightFunc();
     const paperWidth = paperWidthFunc();
-    const MultiplierFields = document.getElementsByName(`${direction}MultiplierField`);
+    const Multipliers = document.getElementsByName(`${direction}Multiplier`);
 
     // Calculate the horizontal spacing for the lines
-    const color = ColorFields[j].value
-    const offset_number = parseInt(OffsetFields[j].value);
+    const color = Colors[j].value
+    const offset_number = parseInt(Offsets[j].value);
     const offset_size = offset_number * gridSize;
-    const multiplier = parseInt(MultiplierFields[j].value);
-    const strokeWidth = parseFloat(StrokeWidthFields[j].value);
-    let strokeDashArray = StrokeDashArrayFields[j].value;
+    const multiplier = parseInt(Multipliers[j].value);
+    const strokeWidth = parseFloat(StrokeWidths[j].value);
+    let strokeDashArray = StrokeDashArrays[j].value;
     strokeDashArray = strokeDashArray.split(',').map(el => `${el}${gridUnits}`).join(',');
-    let number_of_lines = parseInt(CellsFields[j].value);
+    let number_of_lines = parseInt(Cells[j].value);
 
     // Add the vertical lines
     for (let i = 0; i <= number_of_lines - Math.abs(offset_number); i += (multiplier >= 1 ? multiplier : 1)) {
-        let x = gridSize * i + (maxStrokeWidthField / 2) + (offset_size > 0 ? offset_size : 0);
+        let x = gridSize * i + (maxStrokeWidth / 2) + (offset_size > 0 ? offset_size : 0);
         if (direction == "horizontal") {
             svgContent += `<line 
                         x1="${x}${gridUnits}"
@@ -102,12 +102,12 @@ function generateSVG() {
     const gridUnits = document.getElementById('gridUnits').value;
     const paperHeight = paperHeightFunc();
     const paperWidth = paperWidthFunc();
-    const CellsFields = document.getElementsByName(`horizontalCellsField`);
+    const Cells = document.getElementsByName(`horizontalCells`);
 
     let svgContent = `<svg width="${paperWidth}${gridUnits}" height="${paperHeight}${gridUnits}" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="100%" height="100%" fill="white" />`;
-    for (let j = 0; j < CellsFields.length; j++) {
-        let top = document.getElementsByName('verticalTopField')[j].checked
+    for (let j = 0; j < Cells.length; j++) {
+        let top = document.getElementsByName('verticalTop')[j].checked
         if (top) {
             svgContent = do_grid('horizontal', svgContent, j);
             svgContent = do_grid('vertical', svgContent, j);
@@ -138,18 +138,18 @@ function generateSVG() {
     div.appendChild(p);
 }
 
-function addCellField() {
-    let cellsFields = document.getElementById('CellsFields');
-    let firstDiv = cellsFields.querySelector('div');
+function addCell() {
+    let cells = document.getElementById('Cells');
+    let firstDiv = cells.querySelector('div');
     let clone = firstDiv.cloneNode(true);
 
-    cellsFields.appendChild(clone);
+    cells.appendChild(clone);
 }
 
-function removehorizontalCellsField(button) {
-    const CellsFieldsContainer = document.getElementById('CellsFields');
+function removehorizontalCells(button) {
+    const CellsContainer = document.getElementById('Cells');
     const div = button.parentNode;
-    CellsFieldsContainer.removeChild(div);
+    CellsContainer.removeChild(div);
 }
 
 function saveValues() {
@@ -186,13 +186,13 @@ function importValues() {
     let urlParams = new URLSearchParams(window.location.search);
     let urlParamsValues = Array.from(urlParams.values());
     let numberOfUrlParams = urlParams.toString().split('&').length;
-    let numberOfGridOptions = document.getElementsByName('CellField')[0].querySelectorAll('label').length;
+    let numberOfGridOptions = document.getElementsByName('Cell')[0].querySelectorAll('label').length;
 
     // Make the number of grids equal to the number of URL parameters
-    let numberofGrids = document.getElementsByName('CellField').length
+    let numberofGrids = document.getElementsByName('Cell').length
     while (numberofGrids < (numberOfUrlParams - numberofGrids) / numberOfGridOptions) {
-        addCellField();
-        numberofGrids = document.getElementsByName('CellField').length;
+        addCell();
+        numberofGrids = document.getElementsByName('Cell').length;
     }
 
     let saveThis = document.querySelectorAll('.saveThis');

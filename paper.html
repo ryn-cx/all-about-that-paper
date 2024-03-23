@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div id="GridFields">
+    <div id="Grids">
         <label>Grid Size:
             <input type="number" name="gridSize" class="saveThis" id="gridSize" value="1" step="0.01" min="0"
                 oninput="generateSVG()">
@@ -28,82 +28,82 @@
     </div>
     <hr>
 
-    <div id="CellsFields">
-        <div name="CellField">
+    <div id="Cells">
+        <div name="Cell">
             <label>
                 X Cells:
-                <input type="number" name="horizontalCellsField" class="saveThis" value="2" step="1" min="0" size="4"
+                <input type="number" name="horizontalCells" class="saveThis" value="2" step="1" min="0" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Offset:
-                <input type="number" name="horizontalOffsetField" class="saveThis" value="0" step="1" size="4"
+                <input type="number" name="horizontalOffset" class="saveThis" value="0" step="1" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Multiplier:
-                <input type="number" name="horizontalMultiplierField" class="saveThis" value="1" step="1" size="4"
+                <input type="number" name="horizontalMultiplier" class="saveThis" value="1" step="1" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Color:
-                <input type="color" name="horizontalColorField" class="saveThis" value="black" oninput="generateSVG()">
+                <input type="color" name="horizontalColor" class="saveThis" value="black" oninput="generateSVG()">
             </label>
             <label>
                 Stroke Width:
-                <input type="number" name="horizontalStrokeWidthField" class="saveThis" value="0.01" step="0.01"
-                    size="4" oninput="generateSVG()">
+                <input type="number" name="horizontalStrokeWidth" class="saveThis" value="0.01" step="0.01" size="4"
+                    oninput="generateSVG()">
             </label>
             <label>
                 Stroke Dash Array:
-                <input type="str" name="horizontalStrokeDashArrayField" class="saveThis" value="0" size="4"
+                <input type="str" name="horizontalStrokeDashArray" class="saveThis" value="0" size="12"
                     oninput="generateSVG()">
             </label>
             <label>
                 Top:
-                <input type="checkbox" name="horizontalTopField" class="saveThis" oninput="generateSVG()">
+                <input type="checkbox" name="horizontalTop" class="saveThis" oninput="generateSVG()">
             </label>
             <br>
             <label>
                 Y Cells:
-                <input type="number" name="verticalCellsField" class="saveThis" value="2" step="1" min="0" size="4"
+                <input type="number" name="verticalCells" class="saveThis" value="2" step="1" min="0" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Offset:
-                <input type="number" name="verticalOffsetField" class="saveThis" value="0" step="1" size="4"
+                <input type="number" name="verticalOffset" class="saveThis" value="0" step="1" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Multiplier:
-                <input type="number" name="verticalMultiplierField" class="saveThis" value="1" step="1" size="4"
+                <input type="number" name="verticalMultiplier" class="saveThis" value="1" step="1" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Color:
-                <input type="color" name="verticalColorField" class="saveThis" value="black" oninput="generateSVG()">
+                <input type="color" name="verticalColor" class="saveThis" value="black" oninput="generateSVG()">
             </label>
             <label>
                 Stroke Width:
-                <input type="number" name="verticalStrokeWidthField" class="saveThis" value="0.01" step="0.01" size="4"
+                <input type="number" name="verticalStrokeWidth" class="saveThis" value="0.01" step="0.01" size="4"
                     oninput="generateSVG()">
             </label>
             <label>
                 Stroke Dash Array:
-                <input type="str" name="verticalStrokeDashArrayField" class="saveThis" value="0" size="4"
+                <input type="str" name="verticalStrokeDashArray" class="saveThis" value="0" size="12"
                     oninput="generateSVG()">
             </label>
             <label>
                 Top:
-                <input type="checkbox" name="verticalTopField" class="saveThis" oninput="generateSVG()">
+                <input type="checkbox" name="verticalTop" class="saveThis" oninput="generateSVG()">
             </label>
             <br>
-            <button onclick="removehorizontalCellsField(this)">Remove</button>
+            <button onclick="removehorizontalCells(this)">Remove</button>
             <hr>
         </div>
     </div>
 
-    <button onclick="addCellField()">Add Input Field</button>
+    <button onclick="addCell()">Add Input </button>
     <button onclick="saveValues()">Save Values</button>
     <button onclick="importValues()">Import Values</button>
     <button onclick="downloadSVG()">Download SVG</button>
@@ -111,7 +111,6 @@
     <div id="svgContainer"></div>
 
     <script>
-
         importValues();
         generateSVG();
     </script>

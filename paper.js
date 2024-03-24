@@ -10,32 +10,18 @@ function downloadSVG() {
     document.body.removeChild(link);
 };
 
-function paperHeightFunc() {
-    const gridSize = Decimal(document.getElementById('gridSize').value);
-
-    const verticalCells = document.getElementsByName('verticalCells');
-    const verticalCellValues = Array.from(verticalCells).map(el => el.value);
-    const maxHorizontalCell = Math.max(...verticalCellValues);
-
-    const verticalStrokeWidths = document.getElementsByName('verticalStrokeWidth');
-    const verticalStrokeWidthValues = Array.from(verticalStrokeWidths).map(el => el.value);
-    const maxVerticalStrokeWidth = Math.max(...verticalStrokeWidthValues);
-
-    return gridSize.times(maxHorizontalCell).plus(maxVerticalStrokeWidth);
-}
-
-function paperWidthFunc() {
+function paperSize(direction) {
     const gridSize = new Decimal(document.getElementById('gridSize').value);
 
-    const horizontalCells = document.getElementsByName('horizontalCells');
-    const horizontalCellValues = Array.from(horizontalCells).map(el => el.value);
-    const maxVerticalCell = Math.max(...horizontalCellValues);
+    const cells = document.getElementsByName(`${direction}Cells`);
+    const cellValues = Array.from(cells).map(el => el.value);
+    const cellMaxNumber = Math.max(...cellValues);
 
-    const horizontalStrokeWidths = document.getElementsByName('horizontalStrokeWidth');
-    const horizontalStrokeWidthValues = Array.from(horizontalStrokeWidths).map(el => el.value);
-    const maxHorizontalStrokeWidth = Math.max(...horizontalStrokeWidthValues);
+    const strokeWidths = document.getElementsByName(`${direction}StrokeWidth`);
+    const strokeWidthValues = Array.from(strokeWidths).map(el => el.value);
+    const strokeWidthMax = Math.max(...strokeWidthValues);
 
-    return gridSize.times(maxVerticalCell).plus(maxHorizontalStrokeWidth);
+    return gridSize.times(cellMaxNumber).plus(strokeWidthMax);
 }
 
 function do_grid(direction, svgContent, j) {
@@ -51,8 +37,8 @@ function do_grid(direction, svgContent, j) {
     const StrokeWidthValues = Array.from(StrokeWidths).map(el => el.value);
     const maxStrokeWidth = Decimal(Math.max(...StrokeWidthValues));
     const StrokeDashArrays = document.getElementsByName(`${direction}StrokeDashArray`);
-    const paperHeight = paperHeightFunc();
-    const paperWidth = paperWidthFunc();
+    const paperHeight = paperSize("vertical");
+    const paperWidth = paperSize("horizontal");
     const Multipliers = document.getElementsByName(`${direction}Multiplier`);
 
     // Calculate the horizontal spacing for the lines
@@ -101,8 +87,8 @@ function generateSVG() {
     // Calculate the required space using grid size and the number of lines
     const gridSize = Decimal(document.getElementById('gridSize').value);
     const gridUnits = document.getElementById('gridUnits').value;
-    const paperHeight = paperHeightFunc();
-    const paperWidth = paperWidthFunc();
+    const paperHeight = paperSize("vertical");
+    const paperWidth = paperSize("horizontal");
     const Cells = document.getElementsByName(`horizontalCells`);
 
     let svgContent = `<svg width="${paperWidth}${gridUnits}" height="${paperHeight}${gridUnits}" xmlns="http://www.w3.org/2000/svg">

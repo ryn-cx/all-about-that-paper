@@ -1,12 +1,18 @@
 #!/bin/bash
 
-# # Check if the input PDF file is provided
-# if [ -z "$1" ]; then
-#     echo "Usage: $0 <input_pdf>"
-#     exit 1
-# fi
+# Check if the input PDF file is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <input_pdf>"
+    exit 1
+fi
 
-input_pdf="4_pages.pdf"
+input_pdf="$1"
+
+if [ ! -f "$input_pdf" ]; then
+    echo "Error: File not found: $input_pdf"
+    exit 1
+fi
+
 output_pdf="cropped.pdf"
 output_pdf_2="cropped_2.pdf"
 
@@ -20,20 +26,12 @@ rm -f "$output_pdf"
 rm -f "$output_pdf_2"
 rm -f "$temp_file_2"
 
-
-# Iterate over each page of the PDF
-page_num=1
-while true; do
-    echo $page_num
-    # Extract the current page to a temporary file
+num_pages=$(pdfinfo "$input_pdf" | grep -i "Pages" | awk '{print $2}')
+for page_num in $(seq 1 $num_pages); do
+    # Extract the current page so it can be modified one page at a time
     pdftk "$input_pdf" cat "$page_num" output "$temp_file"
 
-    # Check if the extraction was successful (i.e., if the page exists)
-    if [ $? -ne 0 ]; then
-        break
-    fi
-
-    # Determine the crop margins based on the page number
+    # Left and right pages have different crops for use in binders
     if [ $((page_num % 2)) -eq 1 ]; then
         # Left-hand page
         pdf-crop-margins -o "$temp_file_2" -p 1 -a4 -48.96 -21.42 -18 -21.42 "$temp_file"
@@ -42,7 +40,7 @@ while true; do
         pdf-crop-margins -o "$temp_file_2" -p 1 -a4 -18 -21.42 -48.96 -21.42 "$temp_file"
     fi
 
-    # Check if output_pdf exists
+    # Need to check if file exists before concat is attempted
     if [ -f "$output_pdf" ]; then
         pdftk "$output_pdf" "$temp_file_2" cat output "$output_pdf_2"
     else
@@ -50,14 +48,10 @@ while true; do
     fi
 
     cp "$output_pdf_2" "$output_pdf"
-
-    # Move to the next page
-    page_num=$((page_num + 1))
 done
 
 # # Clean up the temporary file
-# rm -f "$temp_file"
 rm -f "$temp_file"
 rm -f "$output_pdf"
-rm -f "$temp_file_2"
+rm -f "$temp_file"
 echo "Cropped PDF saved as $output_pdf"

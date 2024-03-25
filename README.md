@@ -9,7 +9,11 @@ Afterwards
 cairosvg input.svg -o cairo.pdf
 
 Left hand pages
-pdf-crop-margins -o out.pdf -p 100 -a4 -48.96 -21.42 -36 -21.42 cairo.pdf
+pdf-crop-margins -o out.pdf -p 100 -a4 -48.96 -21.42 -18 -21.42 cairo.pdf
 
 Right hand pages
-pdf-crop-margins -o out.pdf -p 100 -a4 -36 -21.42 -48.96 -21.42 cairo.pdf
+pdf-crop-margins -o out.pdf -p 100 -a4 -18 -21.42 -48.96 -21.42 cairo.pd
+
+Middle ground
+
+-a4 -18 -21.42 -18 -21.42
